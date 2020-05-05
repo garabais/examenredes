@@ -34,6 +34,7 @@ ip domain-name equipo3.com
 !
 errdisable recovery cause security-violation
 errdisable recovery interval 180
+mac address-table aging-time 86400
 spanning-tree mode pvst
 spanning-tree extend system-id
 !

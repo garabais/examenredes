@@ -12,6 +12,7 @@ logging 10.40.72.64
 !!!!!!!!!!!!!!!!!!!!!!!!!!!violaciones y recuperacion
 errdisable recovery cause security-violation
 errdisable recovery interval 180
+mac address-table aging-time 86400
 
 !hora
 clock timezone mexico -6 0
