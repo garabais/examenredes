@@ -1,0 +1,197 @@
+SW2#sh running-config
+Building configuration...
+
+Current configuration : 3057 bytes
+!
+version 12.2
+no service pad
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+service password-encryption
+!
+hostname SW2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+clock timezone mexico -6
+clock summer-time mexico recurring
+system mtu routing 1500
+ip subnet-zero
+!
+!
+no ip domain-lookup
+ip domain-name equipo3.com
+!
+!
+!
+!
+!
+!
+!
+!
+errdisable recovery cause security-violation
+errdisable recovery interval 180
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh version 2
+!
+!
+interface FastEthernet0/1
+ description Pto trunk al router
+ switchport mode trunk
+!
+interface FastEthernet0/2
+ description Wireless Cameras
+ switchport access vlan 2
+ switchport mode access
+ no lldp transmit
+ no cdp enable
+!
+interface FastEthernet0/3
+ description Switches y equipos de redes
+ switchport access vlan 3
+ switchport mode access
+!
+interface FastEthernet0/4
+ description Impresoras
+ switchport access vlan 4
+ switchport mode access
+ no lldp transmit
+ no cdp enable
+!
+interface FastEthernet0/5
+ description Wireless Guest (Invitados)
+ switchport access vlan 5
+ switchport mode access
+ no cdp enable
+!
+interface FastEthernet0/6
+ description Wireless empleados
+ switchport access vlan 6
+ switchport mode access
+ no lldp transmit
+ no cdp enable
+!
+interface FastEthernet0/7
+ shutdown
+!
+interface FastEthernet0/8
+ shutdown
+!
+interface FastEthernet0/9
+ shutdown
+!
+interface FastEthernet0/10
+ shutdown
+!
+interface FastEthernet0/11
+ shutdown
+!
+interface FastEthernet0/12
+ shutdown
+!
+interface FastEthernet0/13
+ shutdown
+!
+interface FastEthernet0/14
+ shutdown
+!
+interface FastEthernet0/15
+ shutdown
+!
+interface FastEthernet0/16
+ shutdown
+!
+interface FastEthernet0/17
+ shutdown
+!
+interface FastEthernet0/18
+ shutdown
+!
+interface FastEthernet0/19
+ shutdown
+!
+interface FastEthernet0/20
+ shutdown
+!
+interface FastEthernet0/21
+ shutdown
+!
+interface FastEthernet0/22
+ shutdown
+!
+interface FastEthernet0/23
+ shutdown
+!
+interface FastEthernet0/24
+ shutdown
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ no ip route-cache
+ shutdown
+!
+interface Vlan2
+ ip address dhcp
+ no ip route-cache
+!
+interface Vlan3
+ ip address 172.19.16.66 255.255.255.224
+ no ip route-cache
+!
+interface Vlan4
+ ip address dhcp
+ no ip route-cache
+!
+interface Vlan5
+ ip address dhcp
+ no ip route-cache
+!
+interface Vlan6
+ ip address dhcp
+ no ip route-cache
+!
+ip default-gateway 172.19.16.65
+ip http server
+ip http secure-server
+logging 10.40.72.64
+no cdp run
+!
+control-plane
+!
+banner motd ^C
+          _____
+         /     \
+         vvvvvvv  /|__/|
+            I   /O,O   |
+            I /_____   |      /|/|
+           J|/^ ^ ^ \  |    /00  |    _//|
+            |^ ^ ^ ^ |W|   |/^^\ |   /oo |
+             \m___m__|_|    \m_m_|   \mm_|
+Switch:
+^C
+!
+line con 0
+ exec-timeout 5 0
+line vty 0 4
+ exec-timeout 5 0
+ login
+ transport input all
+line vty 5 15
+ exec-timeout 5 0
+ login
+ transport input all
+!
+ntp clock-period 36029157
+ntp server 172.19.16.65 prefer
+end

@@ -1,0 +1,296 @@
+Current configuration : 6109 bytes
+!
+! Last configuration change at 20:03:51 mexico Mon May 4 2020
+version 15.1
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+service password-encryption
+!
+hostname RT1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+logging buffered 4096
+!
+no aaa new-model
+clock timezone mexico -6 0
+clock summer-time mexico recurring
+!
+no ipv6 cef
+ip source-route
+ip cef
+!
+!
+!
+ip dhcp excluded-address 172.19.0.1 172.19.0.10
+ip dhcp excluded-address 172.19.0.193 172.19.0.202
+ip dhcp excluded-address 172.19.1.1 172.19.1.10
+ip dhcp excluded-address 172.19.2.1 172.19.2.10
+ip dhcp excluded-address 172.19.3.1 172.19.3.10
+ip dhcp excluded-address 172.19.4.1 172.19.4.10
+ip dhcp excluded-address 172.19.0.129 172.19.0.139
+ip dhcp excluded-address 172.19.0.65 172.19.0.75
+!
+ip dhcp pool VLAN2
+ network 172.19.0.0 255.255.255.192
+ default-router 172.19.0.1
+ dns-server 8.8.8.8
+ lease 0 0 30
+!
+ip dhcp pool VLAN4
+ network 172.19.0.128 255.255.255.192
+ default-router 172.19.0.129
+ dns-server 8.8.8.8
+ lease 0 0 30
+!
+ip dhcp pool VLAN5
+ network 172.19.0.192 255.255.255.192
+ default-router 172.19.0.193
+ dns-server 8.8.8.8
+ lease 0 0 30
+!
+ip dhcp pool VLAN6
+ network 172.19.1.0 255.255.255.192
+ default-router 172.19.1.1
+ dns-server 8.8.8.8
+ lease 0 0 30
+!
+ip dhcp pool VLAN7
+ network 172.19.2.0 255.255.255.128
+ default-router 172.19.2.1
+ dns-server 8.8.8.8
+ lease 0 0 30
+!
+ip dhcp pool VLAN8
+ network 172.19.3.0 255.255.255.0
+ default-router 172.19.3.1
+ dns-server 8.8.8.8
+ lease 0 0 30
+!
+ip dhcp pool VLAN9
+ network 172.19.4.0 255.255.252.0
+ default-router 172.19.4.1
+ dns-server 8.8.8.8
+ lease 0 0 30
+!
+ip dhcp pool VLAN3
+ network 172.19.0.64 255.255.255.192
+ default-router 172.19.0.65
+ dns-server 8.8.8.8
+ lease 0 0 30
+!
+!
+no ip domain lookup
+ip domain name equipo3.com
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+crypto pki token default removal timeout 0
+!
+!
+voice-card 0
+!
+!
+!
+!
+!
+!
+!
+license udi pid CISCO2901/K9 sn FTX161484EG
+license boot module c2900 technology-package uck9
+hw-module pvdm 0/0
+!
+!
+!
+!
+redundancy
+!
+!
+ip ssh version 2
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ description TRUNK
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0.2
+ description vlan2
+ encapsulation dot1Q 2
+ ip address 172.19.0.1 255.255.255.192
+ ip nat inside
+ ip virtual-reassembly in
+ no cdp enable
+!
+interface GigabitEthernet0/0.3
+ description vlan3
+ encapsulation dot1Q 3
+ ip address 172.19.0.65 255.255.255.192
+ no cdp enable
+!
+interface GigabitEthernet0/0.4
+ description vlan4
+ encapsulation dot1Q 4
+ ip address 172.19.0.129 255.255.255.192
+ no cdp enable
+!
+interface GigabitEthernet0/0.5
+ description vlan5
+ encapsulation dot1Q 5
+ ip address 172.19.0.193 255.255.255.192
+ ip nat inside
+ ip virtual-reassembly in
+ no cdp enable
+!
+interface GigabitEthernet0/0.6
+ description vlan6
+ encapsulation dot1Q 6
+ ip address 172.19.1.1 255.255.255.192
+ ip nat inside
+ ip virtual-reassembly in
+ no cdp enable
+!
+interface GigabitEthernet0/0.7
+ description vlan7
+ encapsulation dot1Q 7
+ ip address 172.19.2.1 255.255.255.128
+ ip nat inside
+ ip virtual-reassembly in
+ no cdp enable
+!
+interface GigabitEthernet0/0.8
+ description vlan8
+ encapsulation dot1Q 8
+ ip address 172.19.3.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ no cdp enable
+!
+interface GigabitEthernet0/0.9
+ description vlan9
+ encapsulation dot1Q 9
+ ip address 172.19.4.1 255.255.252.0
+ ip nat inside
+ ip virtual-reassembly in
+ no cdp enable
+!
+interface GigabitEthernet0/1
+ description ISP
+ ip address dhcp
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ ip address 192.168.0.2 255.255.255.252
+ no fair-queue
+!
+interface Serial0/0/1
+ ip address 192.168.0.6 255.255.255.252
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/1
+ip route 0.0.0.0 0.0.0.0 10.40.72.254 254
+ip route 172.19.16.0 255.255.252.0 Serial0/0/0
+ip route 172.19.16.0 255.255.252.0 Serial0/0/1
+!
+logging 10.40.72.64
+access-list 1 remark ACL para NAT
+access-list 1 remark Salida a VLAN2
+access-list 1 permit 172.19.0.0 0.0.0.63
+access-list 1 remark Salida a VLAN5
+access-list 1 permit 172.19.0.192 0.0.0.63
+access-list 1 remark Salida a VLAN6
+access-list 1 permit 172.19.1.0 0.0.0.63
+access-list 1 remark Salida a VLAN7
+access-list 1 permit 172.19.2.0 0.0.0.127
+access-list 1 remark Salida a VLAN8
+access-list 1 permit 172.19.3.0 0.0.0.255
+access-list 1 remark Salida a VLAN9
+access-list 1 permit 172.19.4.0 0.0.3.255
+access-list 1 deny   any log
+!
+no cdp run
+!
+!
+control-plane
+!
+!
+!
+!
+mgcp profile default
+!
+!
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+banner motd ^C
+                        !         !
+                       ! !       ! !
+                      ! . !     ! . !
+                        ^^^^^^^^^^
+                      ^             ^
+                    ^  (0)       (0)  ^
+                   ^        ""         ^
+                  ^   ***************    ^
+                ^   *                 *   ^
+               ^   *   /\   /\   /\    *    ^
+              ^   *                     *    ^
+             ^   *   /\   /\   /\   /\   *    ^
+            ^   *                         *    ^
+            ^  *                           *   ^
+            ^  *                           *   ^
+             ^ *                           *  ^
+              ^*                           * ^
+               ^ *                        * ^
+               ^  *                      *  ^
+                 ^  *       ) (         * ^
+                     ^^^^^^^^ ^^^^^^^^^
+Router:
+^C
+!
+line con 0
+ exec-timeout 5 0
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport input all
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ exec-timeout 5 0
+ login
+ transport input all
+line vty 5 15
+ exec-timeout 5 0
+ login
+ transport input all
+!
+scheduler allocate 20000 1000
+ntp source GigabitEthernet0/1
+ntp server 10.40.72.254 prefer
+end

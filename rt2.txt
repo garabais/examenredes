@@ -1,0 +1,177 @@
+!comandos basicos
+service password-encryption
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+no ip domain-lookup
+hostname RT2
+
+logging on
+logging buffered 4096
+logging 10.40.72.64
+
+!hora
+clock timezone mexico -6 0
+clock summer-time mexico recurring
+ntp server 10.40.72.254 prefer
+ntp source GigabitEthernet0/1
+
+banner motd #
+                        !         !
+                       ! !       ! !
+                      ! . !     ! . !
+                        ^^^^^^^^^^
+                      ^             ^
+                    ^  (0)       (0)  ^
+                   ^        ""         ^
+                  ^   ***************    ^
+                ^   *                 *   ^
+               ^   *   /\   /\   /\    *    ^
+              ^   *                     *    ^
+             ^   *   /\   /\   /\   /\   *    ^
+            ^   *                         *    ^
+            ^  *                           *   ^
+            ^  *                           *   ^
+             ^ *                           *  ^
+              ^*                           * ^
+               ^ *                        * ^
+               ^  *                      *  ^
+                 ^  *       ) (         * ^
+                     ^^^^^^^^ ^^^^^^^^^
+Router:
+#
+
+!llaves y version de ssh
+ip domain-name equipo3.com
+crypto key generate rsa general-keys modulus 1024
+!crypto key generate rsa
+!yes
+!1024
+ip ssh version 2
+
+
+!access list
+access-list 1 remark ACL para NAT
+access-list 1 remark Salida a VLAN3
+access-list 1 permit 172.19.16.64 0.0.0.63
+access-list 1 remark Salida a VLAN5
+access-list 1 permit 172.17.0.192 0.0.0.255
+access-list 1 remark Salida a VLAN6
+access-list 1 permit 172.19.18.0 0.0.1.255
+access-list 1 deny any log
+
+
+!!!rutas por default
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/1
+ip route 172.19.0.0 255.255.248.0 Serial0/0/0
+ip route 172.19.0.0 255.255.248.0 Serial0/0/1
+
+!!!!internet
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!sobre lldp y cdp
+no cdp run
+
+!consola usuarios locales kick a los 5 minutos
+line con 0
+ exec-timeout 5 0
+ no login local
+
+!terminales virtuales
+line vty 0 4
+ exec-timeout 5 0
+ transport input all
+line vty 5 15
+ exec-timeout 5 0
+ transport input all
+
+
+!!!!!!!!!!!!!!!!!!!ip dhcp
+ip dhcp excluded-address 172.19.16.1 172.19.16.10
+ip dhcp excluded-address 172.19.16.75 172.19.16.75
+ip dhcp excluded-address 172.19.16.129 172.19.139
+ip dhcp excluded-address 172.19.17.1 172.19.17.10
+ip dhcp excluded-address 172.19.18.1 172.19.18.10
+
+
+
+ip dhcp pool VLAN2
+ network 172.19.16.0 255.255.255.192
+ default-router 172.19.16.1
+ dns-server 8.8.8.8
+ lease 0 0 30
+ip dhcp pool VLAN3
+ network 172.19.16.64 255.255.255.192
+ default-router 172.19.16.65
+ dns-server 8.8.8.8
+ lease 0 0 30
+ip dhcp pool VLAN4
+ network 172.19.16.128 255.255.255.192
+ default-router 172.19.16.129
+ dns-server 8.8.8.8
+ lease 0 0 30
+ip dhcp pool VLAN5
+ network 172.19.17.0 255.255.255.0
+ default-router 172.19.17.1
+ dns-server 8.8.8.8
+ lease 0 0 30
+ip dhcp pool VLAN6
+ network 172.19.18.0 255.255.254.0
+ default-router 172.19.18.1
+ dns-server 8.8.8.8
+ lease 0 0 30
+
+interface GigabitEthernet0/0
+ description TRUNK
+ no ip address
+ duplex auto
+ no shutdown
+ speed auto
+!
+interface GigabitEthernet0/0.2
+ description vlan2
+ encapsulation dot1Q 2
+ ip address 172.19.16.1 255.255.255.192
+!
+interface GigabitEthernet0/0.3
+ description vlan3
+ encapsulation dot1Q 3
+ ip address 172.19.16.65 255.255.255.192
+ ip nat inside
+!
+interface GigabitEthernet0/0.4
+ description vlan4
+ encapsulation dot1Q 4
+ ip address 172.19.16.129 255.255.255.192
+!
+interface GigabitEthernet0/0.5
+ description vlan5
+ encapsulation dot1Q 5
+ ip address 172.19.17.1 255.255.255.0
+ ip nat inside
+!
+interface GigabitEthernet0/0.6
+ description vlan6
+ encapsulation dot1Q 6
+ ip address 172.19.18.1 255.255.254.0
+ ip nat inside
+!
+
+interface GigabitEthernet0/1
+ description ISP
+ ip address dhcp
+ ip nat outside
+ duplex auto
+ speed auto
+ no shutdown
+!
+
+interface Serial 0/0/0
+ ip address 192.168.0.1 255.255.255.252
+ clock rate 8000000
+ no shutdown
+interface Serial 0/0/1
+ ip address 192.168.0.5 255.255.255.252
+ clock rate 8000000
+ no shutdown
+
+
