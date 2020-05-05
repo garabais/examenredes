@@ -91,6 +91,9 @@ interface FastEthernet0/2
  no lldp transmit
  no cdp enable
  switchport mode access
+ switchport port-security
+ switchport port-security maximum 35
+ switchport port-security violation shutdown
  no shutdown
 !
 interface FastEthernet0/3
@@ -99,6 +102,9 @@ interface FastEthernet0/3
  lldp transmit
  cdp enable
  switchport mode access
+ switchport port-security
+ switchport port-security maximum 35
+ switchport port-security violation shutdown
  no shutdown
 !
 interface FastEthernet0/4
@@ -107,6 +113,9 @@ interface FastEthernet0/4
  no lldp transmit
  no cdp enable
  switchport mode access
+ switchport port-security
+ switchport port-security maximum 35
+ switchport port-security violation shutdown
  no shutdown
 !
 interface FastEthernet0/5

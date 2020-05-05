@@ -52,11 +52,17 @@ interface FastEthernet0/2
  switchport mode access
  no lldp transmit
  no cdp enable
+ switchport port-security
+ switchport port-security maximum 35
+ switchport port-security violation shutdown
 !
 interface FastEthernet0/3
  description Switches y equipos de redes
  switchport access vlan 3
  switchport mode access
+ switchport port-security
+ switchport port-security maximum 35
+ switchport port-security violation shutdown
 !
 interface FastEthernet0/4
  description Impresoras
@@ -64,6 +70,9 @@ interface FastEthernet0/4
  switchport mode access
  no lldp transmit
  no cdp enable
+ switchport port-security
+ switchport port-security maximum 35
+ switchport port-security violation shutdown
 !
 interface FastEthernet0/5
  description Wireless Guest (Invitados)

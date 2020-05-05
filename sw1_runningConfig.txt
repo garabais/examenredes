@@ -51,6 +51,9 @@ interface FastEthernet0/2
  switchport mode access
  no lldp transmit
  no cdp enable
+ switchport port-security
+ switchport port-security maximum 35
+ switchport port-security violation shutdown
 !
 interface FastEthernet0/3
  description Puerto de servidores backend
@@ -58,6 +61,9 @@ interface FastEthernet0/3
  switchport mode access
  no lldp transmit
  no cdp enable
+ switchport port-security
+ switchport port-security maximum 35
+ switchport port-security violation shutdown
 !
 interface FastEthernet0/4
  description Puerto de servidores Impresoras
@@ -65,11 +71,17 @@ interface FastEthernet0/4
  switchport mode access
  no lldp transmit
  no cdp enable
+ switchport port-security
+ switchport port-security maximum 35
+ switchport port-security violation shutdown
 !
 interface FastEthernet0/5
  description Puerto de servidores equipos de red
  switchport access vlan 5
  switchport mode access
+ switchport port-security
+ switchport port-security maximum 35
+ switchport port-security violation shutdown
 !
 interface FastEthernet0/6
  description Puerto de wireless gerente
